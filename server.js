@@ -10,7 +10,12 @@ const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
 const runner            = require('./test-runner');
 
+const port = process.env.PORT || 3000;
+
 const app = express();
+
+//This is not best practice but allows the variables to be available for automated testing through FCC
+process.env.NODE_ENV='test';
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
@@ -21,7 +26,6 @@ app.use(helmet.xssFilter());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-process.env.NODE_ENV='test';
 
 //Sample front-end
 app.route('/:project/')
@@ -49,15 +53,15 @@ app.use(function(req, res, next) {
 });
 
 //Start our server and tests!
-app.listen(process.env.PORT || 3000, function () {
-  console.log("Listening on port " + process.env.PORT);
+app.listen(port, function () {
+  console.log("Listening on port " + port);
   if(process.env.NODE_ENV==='test') {
     console.log('Running Tests...');
     setTimeout(function () {
       try {
         runner.run();
       } catch(e) {
-        var error = e;
+        const error = e;
           console.log('Tests are not valid:');
           console.log(error);
       }

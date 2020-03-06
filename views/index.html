@@ -79,6 +79,8 @@
             data: $('#testForm').serialize(),
             success: function(data) {
               $('#jsonResult').text(JSON.stringify(data));
+              // Clear text from form after submit
+              $('#testForm')[0].reset();
             }
           });
           e.preventDefault();
@@ -90,6 +92,8 @@
             data: $('#testForm2').serialize(),
             success: function(data) {
               $('#jsonResult').text(JSON.stringify(data));
+              // Clear text from form after submit
+              $('#testForm2')[0].reset();
             }
           });
           e.preventDefault();
@@ -101,6 +105,8 @@
             data: $('#testForm3').serialize(),
             success: function(data) {
               $('#jsonResult').text(JSON.stringify(data));
+              // Clear text from form
+              $('#testForm3')[0].reset();
             }
           });
           e.preventDefault();

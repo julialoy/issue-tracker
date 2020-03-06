@@ -29,19 +29,44 @@ suite('Functional Tests', function() {
         })
         .end(function(err, res){
           assert.equal(res.status, 200);
-          
-          //fill me in too!
-          
+          assert.equal(res.body.issue_title, 'Title');
+          assert.equal(res.body.issue_text, 'text');
+          assert.equal(res.body.created_by, 'Functional Test - Every field filled in');
+          assert.equal(res.body.assigned_to, 'Chai and Mocha');
+          assert.equal(res.body.status_text, 'In QA');          
           done();
         });
       });
       
       test('Required fields filled in', function(done) {
-        
+        chai.request(server)
+          .post('/api/issues/test')
+          .send({
+            issue_title: 'Required fields test',
+            issue_text: 'Fill in all required fields',
+            created_by: 'Functional Test - Every required field filled'
+          })
+          .end(function(err, res) {
+            assert.equal(res.status, 200);
+            assert.equal(res.body.issue_title, 'Required fields test');
+            assert.equal(res.body.issue_text, 'Fill in all required fields');
+            assert.equal(res.body.created_by, 'Functional Test - Every required field filled');
+            done();
+          });
       });
       
       test('Missing required fields', function(done) {
-        
+        chai.request(server)
+          .post('/api/issues/test')
+          .send({
+            status_text: 'In QA',
+            assigned_to: 'Example test user'
+          })
+          .end(function(err, res) {
+            assert.equal(res.status, 200);
+            assert.equal(res.body.err, err);
+            done();
+          })
       });
       
     });
@@ -49,7 +74,15 @@ suite('Functional Tests', function() {
     suite('PUT /api/issues/{project} => text', function() {
       
       test('No body', function(done) {
-        
+/*         chai.request(server)
+          .post('/api/issues/test')
+          .send({
+
+          })
+          .end(function(err, res) {
+            assert.equal(res.status, 200);
+            done();
+          }) */
       });
       
       test('One field to update', function(done) {
