@@ -104,9 +104,43 @@ module.exports = function (app) {
 
     })
     
-    .put(function (req, res){
+    .put(function (req, res, next){
       const project = req.params.project;
-      
+      const projectId = req.body._id;
+      const projectTitle = req.body.issue_title;
+      const projectText = req.body.issue_text;
+      const projectCreatedBy = req.body.created_by;
+      const projectAssignedTo = req.body.assigned_to;
+      const projectStatus = req.body.status_text;
+      const projectOpen = req.body.open;
+      const projectUpdatedOn = new Date();
+
+      if (projectId && !projectTitle && !projectText && !projectStatus && !projectCreatedBy && !projectAssignedTo && !projectOpen) {
+        return res.json("no updated field sent");
+      }
+
+/*       const fieldTitles = ["issue_title", "issue_text", "created_by", "assigned_to", "status_text", "open"];
+      const fieldContent = [projectTitle, projectText, projectCreatedBy, projectAssignedTo, projectStatus, projectOpen];
+      let update = {updated_on: projectUpdatedOn};
+
+      for (let i = 0; i < fieldContent.length; i++) {
+        if (fieldContent[i]) {
+          update[fieldTitles[i]] = fieldContent[i];
+        }
+      } */
+      const update = {
+        issue_title: projectTitle,
+        issue_text: projectText,
+        created_by: projectCreatedBy,
+        assigned_to: projectAssignedTo,
+        status_text: projectStatus,
+        open: projectOpen,
+        updated_on: projectUpdatedOn
+      };
+
+      IssueTracker.findByIdAndUpdate(projectId, update, {omitUndefined: true, new : true})
+        .then(() => res.json(`successfully updated ${projectId}`))
+        .catch(err => res.json(`could not updated ${projectId}`));
     })
     
     .delete(function (req, res){

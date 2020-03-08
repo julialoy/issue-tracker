@@ -66,7 +66,7 @@ suite('Functional Tests', function() {
             assert.equal(res.status, 200);
             assert.equal(res.body.err, err);
             done();
-          })
+          });
       });
       
     });
@@ -74,19 +74,33 @@ suite('Functional Tests', function() {
     suite('PUT /api/issues/{project} => text', function() {
       
       test('No body', function(done) {
-/*         chai.request(server)
-          .post('/api/issues/test')
+        chai.request(server)
+          .put('/api/issues/test')
           .send({
-
+            _id: "5e615db5f10b0f52da5c8fe8"
           })
           .end(function(err, res) {
             assert.equal(res.status, 200);
+            assert.equal(res.body, "no updated field sent");
             done();
-          }) */
+          });
       });
       
       test('One field to update', function(done) {
-        
+        chai.request(server)
+          .put('/api/issues/test')
+          .send({
+            _id: "5e615db5f10b0f52da5c8fe8",
+            issue_title: "Functional test - One field to update"
+          })
+          .end(function(err, res) {
+            if (err) {
+              assert.equal(res.body, 'could not update 5e615db5f10b0f52da5c8fe8');
+            }
+            assert.equal(res.status, 200);
+            assert.equal(res.body, 'successfully updated 5e615db5f10b0f52da5c8fe8');
+            done();
+          });
       });
       
       test('Multiple fields to update', function(done) {
